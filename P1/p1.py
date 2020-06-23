@@ -10,7 +10,8 @@ def dijkstras_shortest_path(initial_position, destination, graph, adj):
         initial_position: The initial cell from which the path extends.
         destination: The end location for the path.
         graph: A loaded level, containing walls, spaces, and waypoints.
-        adj: An adjacency function returning cells adjacent to a given cell as well as their respective edge costs.
+        adj: An adjacency function returning cells adjacent to a given cell as well as
+        their respective edge costs.
 
     Returns:
         If a path exits, return a list containing all cells from initial_position to destination.
@@ -26,7 +27,8 @@ def dijkstras_shortest_path_to_all(initial_position, graph, adj):
     Args:
         initial_position: The initial cell from which the path extends.
         graph: A loaded level, containing walls, spaces, and waypoints.
-        adj: An adjacency function returning cells adjacent to a given cell as well as their respective edge costs.
+        adj: An adjacency function returning cells adjacent to a given cell as well as their 
+        respective edge costs.
 
     Returns:
         A dictionary, mapping destination cells to the cost of a path from the initial_position.
@@ -42,7 +44,8 @@ def navigation_edges(level, cell):
         cell: A target location.
 
     Returns:
-        A list of tuples containing an adjacent cell's coordinates and the cost of the edge joining it and the
+        A list of tuples containing an adjacent cell's coordinates and the cost of the edge joining 
+        it and the
         originating cell.
 
         E.g. from (0,0):
@@ -51,6 +54,23 @@ def navigation_edges(level, cell):
              ((1,1), 1.4142135623730951),
              ... ]
     """
+    adjCells = []
+    #print(cell, " ", level['spaces'][cell])
+    for i in range(-1,2):
+        for j in range(-1,2):
+            adj = (cell[0]+i,cell[1]+j)
+            if adj in level['walls']:
+                continue
+            if i == 0 and j == 0:
+                continue
+            cost = level['spaces'][adj]
+            if i != 0 and j != 0:
+                cost = sqrt(cost+cost)
+            cellCost = (adj, cost)
+            #print(cellCost)
+            adjCells.append(cellCost)
+
+    #print(adjCells)
     pass
 
 
@@ -73,6 +93,7 @@ def test_route(filename, src_waypoint, dst_waypoint):
     dst = level['waypoints'][dst_waypoint]
 
     # Search for and display the path from src to dst.
+    navigation_edges(level, src)
     path = dijkstras_shortest_path(src, dst, level, navigation_edges)
     if path:
         show_level(level, path)
