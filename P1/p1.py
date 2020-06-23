@@ -18,7 +18,7 @@ def dijkstras_shortest_path(initial_position, destination, graph, adj):
         Otherwise, return None.
 
     """
-    
+    print(initial_position)
     pass
 
 
@@ -60,14 +60,16 @@ def navigation_edges(level, cell):
     for i in range(-1,2):
         for j in range(-1,2):
             adj = (cell[0]+i,cell[1]+j)
-            adj[1] = 54
             if adj in level['walls']:
                 continue
             if i == 0 and j == 0:
                 continue
-            cost = level['spaces'][adj]
+            scCost = .5*level['spaces'][cell]
+            adjCost = .5*level['spaces'][adj]
             if i != 0 and j != 0:
-                cost = sqrt(cost+cost)
+                scCost = scCost * sqrt(2)
+                adjCost = adjCost * sqrt(2)
+            cost = adjCost + scCost
             cellCost = (adj, cost)
             adjCells.append(cellCost)
     return adjCells
@@ -93,7 +95,6 @@ def test_route(filename, src_waypoint, dst_waypoint):
     dst = level['waypoints'][dst_waypoint]
 
     # Search for and display the path from src to dst.
-    navigation_edges(level, src)
     path = dijkstras_shortest_path(src, dst, level, navigation_edges)
     if path:
         show_level(level, path)
