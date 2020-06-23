@@ -18,7 +18,7 @@ def dijkstras_shortest_path(initial_position, destination, graph, adj):
         Otherwise, return None.
 
     """
-    print(initial_position)
+    adjacency = adj(graph,initial_position)
     pass
 
 
