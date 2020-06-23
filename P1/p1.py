@@ -2,7 +2,6 @@ from p1_support import load_level, show_level, save_level_costs
 from math import inf, sqrt
 from heapq import heappop, heappush
 
-
 def dijkstras_shortest_path(initial_position, destination, graph, adj):
     """ Searches for a minimal cost path through a graph using Dijkstra's algorithm.
 
@@ -18,7 +17,41 @@ def dijkstras_shortest_path(initial_position, destination, graph, adj):
         Otherwise, return None.
 
     """
+    myQueue = []
+    dist = {}
+    prev = {}
+    cost = 0
+    dist[initial_position] = 0
     adjacency = adj(graph,initial_position)
+    for x in adjacency:
+        heappush(myQueue, (x[1], initial_position, x[0]))
+
+    #while len(myQueue) != 0:
+    diff, start, end = heappop(myQueue)
+    cost = dist[start] + diff
+    if end in dist:
+        if dist[end] > cost:
+            dist[end] = cost
+            prev[end] = start
+    else:
+        dist[end] = cost
+        prev[end] = start
+    print(dist)
+    adjacency = adj(graph,end)
+    for x in adjacency:
+        heappush(myQueue, (x[1], end, x[0]))
+    diff, start, end = heappop(myQueue)
+    cost = dist[start] + diff
+    if end in dist:
+        if dist[end] > cost:
+            dist[end] = cost
+            prev[end] = start
+    else:
+        dist[end] = cost
+        prev[end] = start
+    print(dist)
+    print(prev)
+                 
     pass
 
 
