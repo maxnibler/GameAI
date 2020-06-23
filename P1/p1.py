@@ -18,6 +18,7 @@ def dijkstras_shortest_path(initial_position, destination, graph, adj):
         Otherwise, return None.
 
     """
+    
     pass
 
 
@@ -59,6 +60,7 @@ def navigation_edges(level, cell):
     for i in range(-1,2):
         for j in range(-1,2):
             adj = (cell[0]+i,cell[1]+j)
+            adj[1] = 54
             if adj in level['walls']:
                 continue
             if i == 0 and j == 0:
@@ -67,10 +69,8 @@ def navigation_edges(level, cell):
             if i != 0 and j != 0:
                 cost = sqrt(cost+cost)
             cellCost = (adj, cost)
-            #print(cellCost)
             adjCells.append(cellCost)
-
-    #print(adjCells)
+    return adjCells
     pass
 
 
