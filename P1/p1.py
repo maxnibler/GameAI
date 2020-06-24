@@ -3,10 +3,20 @@ from math import inf, sqrt
 from heapq import heappop, heappush
 
 def printPath(prev,end):
-    print("path ", end)
+    path = [end]
     while end in prev:
-        print("path ",prev[end])
         end = prev[end]
+        path.append(end)
+    return path
+        
+def pathCost(dist,prev,end):
+    cost = 0
+    p = end
+    while dist[p] > 0:
+        cost += dist[p]
+        p = prev[p]
+        #print(cost)
+    return cost
 
 def dijkstras_shortest_path(initial_position, destination, graph, adj):
     """ Searches for a minimal cost path through a graph using Dijkstra's algorithm.
@@ -31,64 +41,32 @@ def dijkstras_shortest_path(initial_position, destination, graph, adj):
     
     adjacency = adj(graph,initial_position)
     for x in adjacency:
-        heappush(myQueue, (x[1], initial_position, x[0]))
+        heappush(myQueue, (0, x[1], initial_position, x[0]))
         
     while len(myQueue) != 0:
-        diff, start, end = heappop(myQueue)
-        cost = dist[start] + diff
-        print(start," to ", end)
-        print(cost)
+        cost, diff, start, end = heappop(myQueue)
+        #print(start," ",end)
+        #print(prev)
+        #print(cost)
         if end in dist:
-            print(cost," vs ",dist[end])
-            if dist[end] > cost:
-                dist[end] = cost
+            if pathCost(dist,prev,end) > cost:
+                dist[end] = diff
                 prev[end] = start
         else:
-            dist[end] = cost
+            dist[end] = diff
             prev[end] = start
+        if end == destination:
+            return printPath(prev,destination)
+            break
         adjacency = adj(graph,end)
         for x in adjacency:
             if x[0] in prev:
                 continue
             if end in prev and prev[end] == x[0]:
                 continue
-            heappush(myQueue, (x[1], end, x[0]))
-            
-    print(dist)
-    print(prev)
-    printPath(prev,destination)
-    print(dist[destination])
-    """
-    diff, start, end = heappop(myQueue)
-    cost = dist[start] + diff
-    if end in dist:
-        if dist[end] > cost:
-            dist[end] = cost
-            prev[end] = start
-    else:
-        dist[end] = cost
-        prev[end] = start
-    print(dist)
-    adjacency = adj(graph,end)
-    for x in adjacency:
-        heappush(myQueue, (x[1], end, x[0]))
-    diff, start, end = heappop(myQueue)
-    cost = dist[start] + diff
-    if end in dist:
-        if dist[end] > cost:
-            dist[end] = cost
-            prev[end] = start
-    else:
-        dist[end] = cost
-        prev[end] = start
-    print(dist)
-    print(prev)
-    adjacency = adj(graph,end)
-    for x in adjacency:
-        heappush(myQueue, (x[1], end, x[0]))
-    
-    """
-    pass
+            heappush(myQueue, (cost+x[1], x[1], end, x[0]))
+        
+        pass
 
 
 def dijkstras_shortest_path_to_all(initial_position, graph, adj):
@@ -103,6 +81,24 @@ def dijkstras_shortest_path_to_all(initial_position, graph, adj):
     Returns:
         A dictionary, mapping destination cells to the cost of a path from the initial_position.
     """
+    dict = {}
+    for space in graph['spaces']:
+        if space not in graph['walls']:
+            path = dijkstras_shortest_path(initial_position, space, graph, adj)
+            if path is not None:
+                # calculate distance, assuming target is actually reachable
+                cell1 = heappop(path)
+                while len(path) != 0:
+                    cell2 = heappop(path)
+                    if cell1[0] == cell2[0] or cell1[1] == cell2[1]:
+                        # in this case, the cells should be above or next to each other (not diagonal)
+                        distance = int(level['spaces'][cell1]) * 0.5 + int(level['spaces'][cell2]) * 0.5
+                    else:
+                        # in this case, the cells should be diagonal
+                        distance = int(level['spaces'][cell1]) * 0.5 * sqrt(2) + int(level['spaces'][cell2]) * 0.5 * sqrt(2)
+                        dict[space] = distance
+                        cell1 = cell2
+    return dict
     pass
 
 
@@ -165,7 +161,7 @@ def test_route(filename, src_waypoint, dst_waypoint):
 
     # Search for and display the path from src to dst.
     path = dijkstras_shortest_path(src, dst, level, navigation_edges)
-    djikstras_shortest_path(src,(4,9),level,navigation_edges)
+    dijkstras_shortest_path(src,(4,8),level,navigation_edges)
     if path:
         show_level(level, path)
     else:
