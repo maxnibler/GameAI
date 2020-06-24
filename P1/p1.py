@@ -165,6 +165,7 @@ def test_route(filename, src_waypoint, dst_waypoint):
 
     # Search for and display the path from src to dst.
     path = dijkstras_shortest_path(src, dst, level, navigation_edges)
+    djikstras_shortest_path(src,(4,9),level,navigation_edges)
     if path:
         show_level(level, path)
     else:
