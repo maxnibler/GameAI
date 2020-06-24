@@ -91,11 +91,11 @@ def dijkstras_shortest_path_to_all(initial_position, graph, adj):
                 while len(path) != 0:
                     cell2 = heappop(path)
                     if cell1[0] == cell2[0] or cell1[1] == cell2[1]:
-                        # in this case, the cells should be above or next to each other (not diagonal)
-                        distance = int(level['spaces'][cell1]) * 0.5 + int(level['spaces'][cell2]) * 0.5
+                        #in this case, the cells should be above or next to each other (not diagonal)
+                        distance = int(graph['spaces'][cell1]) * 0.5 + int(graph['spaces'][cell2]) * 0.5
                     else:
                         # in this case, the cells should be diagonal
-                        distance = int(level['spaces'][cell1]) * 0.5 * sqrt(2) + int(level['spaces'][cell2]) * 0.5 * sqrt(2)
+                        distance = int(graph['spaces'][cell1]) * 0.5 * sqrt(2) + int(graph['spaces'][cell2]) * 0.5 * sqrt(2)
                         dict[space] = distance
                         cell1 = cell2
     return dict
