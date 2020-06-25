@@ -59,7 +59,7 @@ def dijkstras_shortest_path(initial_position, destination, graph, adj):
             dist[end] = cost
             prev[end] = start
         if end == destination:
-            print (dist[end])
+            #print (dist[end])
             return printPath(prev,destination)
             break
         adjacency = adj(graph,end)
