@@ -261,6 +261,7 @@ def cost_to_all_cells(filename, src_waypoint, output_filename):
 
 
 if __name__ == '__main__':
+#DEFAULT EXAMPLE:----------------------------------------------------------------------------
     filename, src_waypoint, dst_waypoint = 'example.txt', 'a','e'
 
     # Use this function call to find the route between two waypoints.
@@ -268,3 +269,18 @@ if __name__ == '__main__':
 
     # Use this function to calculate the cost to all reachable cells from an origin point.
     cost_to_all_cells(filename, src_waypoint, 'my_costs.csv')
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#"BULLET" 4:----------------------------------------------------------------------------------
+# Load custom maze ('my_maze.txt') and print distances to all points in 'my_maze_costs.csv'
+    filename, src_waypoint = 'my_maze.txt', 'a'
+    cost_to_all_cells(filename, src_waypoint, 'my_maze_costs.csv')
+	
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#"BULLET" 2:----------------------------------------------------------------------------------
+# Find a path from points 'a' to 'd' in 'test_maze.txt' and output to “test_maze_path.txt”
+# 'show_level' may need to be modified to print to a file
+    filename, src_waypoint, dst_waypoint = 'test_maze.txt', 'a', 'd'
+    test_route(filename, src_waypoint, dst_waypoint)
+
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
