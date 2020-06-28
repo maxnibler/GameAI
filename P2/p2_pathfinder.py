@@ -61,8 +61,12 @@ def boxInQ(q, box):
 def totalDist(sc, prev, distance, point):
     tot = 0
     while point != sc:
+        #print(tot," ",point)
+        #print(prev)
+        #print(distance)
         tot += distance[point]
         point = prev[point]
+    return tot
 
 def find_path (source_point, destination_point, mesh):
     """    Searches for a path from source_point to destination_point through the mesh
@@ -117,19 +121,23 @@ def find_path (source_point, destination_point, mesh):
             if adjBox in B:
                 continue
             diff = boxDist(point,adjBox)
-            dist = totalDist(source_point, prev, distance, boxCenter(adjBox))
+            dist = totalDist(source_point, prev, distance, point) + diff
             heappush(queue, (dist, diff, mesh['adj'][currBox][i]))
             count += 1
+    
+    
+    boxes = {}
+    for box in B:
+        boxes[box] = mesh['adj'][box]
+        
+    if dstBox not in B:
+        print("No path!")
+        return path, boxes.keys()
     
     while point != source_point:
         print(point)
         path.append((prev[point],point))
         point = prev[point]
-    if dstBox not in B:
-        print("No path!")
     #print(mesh['adj'][currBox][closeInd])
-    boxes = {}
-    for box in B:
-        boxes[box] = mesh['adj'][box]
     #print(boxes)
     return path, boxes.keys()
