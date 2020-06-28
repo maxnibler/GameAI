@@ -28,9 +28,15 @@ def segmentLength(x1, x2, y1, y2):
     l = math.sqrt(x*x+y*y)
     return l
 
+def boxCenter(box):
+    x = (box[0]+box[1])/2
+    y = (box[2]+box[3])/2
+    return x,y
+
 def boxDist(pt, box):
     #print(pt)
     #print(box)
+    """
     dist = segmentLength(pt[0],box[0],pt[1],box[2])
     newDist = segmentLength(pt[0],box[0],pt[1],box[3])
     if dist > newDist:
@@ -41,16 +47,23 @@ def boxDist(pt, box):
     newDist = segmentLength(pt[0],box[1],pt[1],box[3])
     if dist > newDist:
         dist = newDist
+    """
+    x, y = boxCenter(box)
+    dist = segmentLength(pt[0],x,pt[1],y)
     return dist
 
 def boxInQ(q, box):
     for x in q:
-        print(x," ",box)
-        for i in range(0,3):
-            if x[1][i] == box[i]:
-                return 1
+        if x[1] == box:
+            return 1
     return 0
-    
+
+def totalDist(sc, prev, distance, point):
+    tot = 0
+    while point != sc:
+        tot += distance[point]
+        point = prev[point]
+
 def find_path (source_point, destination_point, mesh):
     """    Searches for a path from source_point to destination_point through the mesh
     Args:
@@ -72,26 +85,48 @@ def find_path (source_point, destination_point, mesh):
             dstBox = cat
             
     queue = []
+    distance = {}
+    prev = {}
     point = source_point
     currBox = scBox
-    B = [scBox,dstBox]
-    path = [(source_point,destination_point)]
+    B = [scBox]
+    #print(B)
+    path = []
     count = 0
     for i in range(0,len(mesh['adj'][currBox])):
-        #newDist = boxDist(point,mesh['adj'][currBox][i])
-        heappush(queue, (count, mesh['adj'][currBox][i]))
+        box = mesh['adj'][currBox][i]
+        diff = boxDist(point,box)
+        distance[boxCenter(box)] = diff
+        heappush(queue, (diff, diff, box))
         count += 1
-    while currBox != dstBox:
-        ind, currBox = heappop(queue)
+    while currBox != dstBox and len(queue) != 0:
+        #print(queue)
+        prePt = point
+        dist, diff, currBox = heappop(queue)
+        #print(currBox,": ", dstBox)
+        if currBox == dstBox:
+            point = destination_point
+        else:
+            point = boxCenter(currBox)
+        prev[point] = prePt
         B.append(currBox)
         for i in range(0,len(mesh['adj'][currBox])):
-            if boxInQ(queue, mesh['adj'][currBox][i]):
+            adjBox = mesh['adj'][currBox][i]
+            if boxInQ(queue, adjBox):
                 continue
-            if mesh['adj'][currBox][i] in B:
+            if adjBox in B:
                 continue
-            heappush(queue, (count, mesh['adj'][currBox][i]))
+            diff = boxDist(point,adjBox)
+            dist = totalDist(source_point, prev, distance, boxCenter(adjBox))
+            heappush(queue, (dist, diff, mesh['adj'][currBox][i]))
             count += 1
     
+    while point != source_point:
+        print(point)
+        path.append((prev[point],point))
+        point = prev[point]
+    if dstBox not in B:
+        print("No path!")
     #print(mesh['adj'][currBox][closeInd])
     boxes = {}
     for box in B:
