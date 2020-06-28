@@ -1,4 +1,5 @@
 import math
+from heapq import heappop, heappush
 
 def swap(a, b):
     temp = a
@@ -28,8 +29,8 @@ def segmentLength(x1, x2, y1, y2):
     return l
 
 def boxDist(pt, box):
-    print(pt)
-    print(box)
+    #print(pt)
+    #print(box)
     dist = segmentLength(pt[0],box[0],pt[1],box[2])
     newDist = segmentLength(pt[0],box[0],pt[1],box[3])
     if dist > newDist:
@@ -42,7 +43,14 @@ def boxDist(pt, box):
         dist = newDist
     return dist
 
-
+def boxInQ(q, box):
+    for x in q:
+        print(x," ",box)
+        for i in range(0,3):
+            if x[1][i] == box[i]:
+                return 1
+    return 0
+    
 def find_path (source_point, destination_point, mesh):
     """    Searches for a path from source_point to destination_point through the mesh
     Args:
@@ -62,13 +70,29 @@ def find_path (source_point, destination_point, mesh):
             scBox = cat
         if inBox(cat, destination_point):
             dstBox = cat
-
+            
+    queue = []
     point = source_point
-    
+    currBox = scBox
     B = [scBox,dstBox]
     path = [(source_point,destination_point)]
-    for i in range(0,len(mesh['adj'][scBox])):
-        print(boxDist(source_point,mesh['adj'][scBox][i]))
+    count = 0
+    for i in range(0,len(mesh['adj'][currBox])):
+        #newDist = boxDist(point,mesh['adj'][currBox][i])
+        heappush(queue, (count, mesh['adj'][currBox][i]))
+        count += 1
+    while currBox != dstBox:
+        ind, currBox = heappop(queue)
+        B.append(currBox)
+        for i in range(0,len(mesh['adj'][currBox])):
+            if boxInQ(queue, mesh['adj'][currBox][i]):
+                continue
+            if mesh['adj'][currBox][i] in B:
+                continue
+            heappush(queue, (count, mesh['adj'][currBox][i]))
+            count += 1
+    
+    #print(mesh['adj'][currBox][closeInd])
     boxes = {}
     for box in B:
         boxes[box] = mesh['adj'][box]
