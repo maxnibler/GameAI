@@ -29,7 +29,10 @@ def find_path (source_point, destination_point, mesh):
             scBox = cat
         if inBox(cat, destination_point):
             dstBox = cat
-    path = []
-    boxes = {scBox:mesh['adj'][scBox],dstBox:mesh['adj'][dstBox]}
-    print(boxes)
+    B = [scBox,dstBox]
+    path = [(source_point,destination_point)]
+    boxes = {}
+    for box in B:
+        boxes[box] = mesh['adj'][box]
+    #print(boxes)
     return path, boxes.keys()
