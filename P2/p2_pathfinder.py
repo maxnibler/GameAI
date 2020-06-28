@@ -1,3 +1,5 @@
+import math
+
 def swap(a, b):
     temp = a
     a = b
@@ -22,8 +24,24 @@ def segmentLength(x1, x2, y1, y2):
         y1, y2 = swap(y1, y2)
     y = y2 - y1
     x = x2 - x1
-    l = sqrt(x*x+y*y)
+    l = math.sqrt(x*x+y*y)
     return l
+
+def boxDist(pt, box):
+    print(pt)
+    print(box)
+    dist = segmentLength(pt[0],box[0],pt[1],box[2])
+    newDist = segmentLength(pt[0],box[0],pt[1],box[3])
+    if dist > newDist:
+        dist = newDist
+    newDist = segmentLength(pt[0],box[1],pt[1],box[2])
+    if dist > newDist:
+        dist = newDist
+    newDist = segmentLength(pt[0],box[1],pt[1],box[3])
+    if dist > newDist:
+        dist = newDist
+    return dist
+
 
 def find_path (source_point, destination_point, mesh):
     """    Searches for a path from source_point to destination_point through the mesh
@@ -44,9 +62,13 @@ def find_path (source_point, destination_point, mesh):
             scBox = cat
         if inBox(cat, destination_point):
             dstBox = cat
+
+    point = source_point
+    
     B = [scBox,dstBox]
-    print(segmentLength(4,1,5,2))
     path = [(source_point,destination_point)]
+    for i in range(0,len(mesh['adj'][scBox])):
+        print(boxDist(source_point,mesh['adj'][scBox][i]))
     boxes = {}
     for box in B:
         boxes[box] = mesh['adj'][box]
