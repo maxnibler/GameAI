@@ -54,16 +54,17 @@ def boxDist(pt, box):
 
 def boxInQ(q, box):
     for x in q:
-        if x[1] == box:
+        if x[2] == box:
             return 1
     return 0
 
 def totalDist(sc, prev, distance, point):
     tot = 0
+    #print(prev)
+    #print(distance)
     while point != sc:
         #print(tot," ",point)
-        #print(prev)
-        #print(distance)
+        #print(distance[point])
         tot += distance[point]
         point = prev[point]
     return tot
@@ -101,18 +102,24 @@ def find_path (source_point, destination_point, mesh):
         box = mesh['adj'][currBox][i]
         diff = boxDist(point,box)
         distance[boxCenter(box)] = diff
-        heappush(queue, (diff, diff, box))
+        heappush(queue, (diff, diff, box, point))
         count += 1
     while currBox != dstBox and len(queue) != 0:
         #print(queue)
-        prePt = point
-        dist, diff, currBox = heappop(queue)
+        dist, diff, currBox, prePt = heappop(queue)
         #print(currBox,": ", dstBox)
         if currBox == dstBox:
             point = destination_point
         else:
             point = boxCenter(currBox)
         prev[point] = prePt
+        if point in distance:
+            if distance[point] > diff:
+                distance[point] = diff
+                prev[point] = prePt
+        else:
+            distance[point] = diff
+            prev[point] = prePt
         B.append(currBox)
         for i in range(0,len(mesh['adj'][currBox])):
             adjBox = mesh['adj'][currBox][i]
@@ -122,7 +129,7 @@ def find_path (source_point, destination_point, mesh):
                 continue
             diff = boxDist(point,adjBox)
             dist = totalDist(source_point, prev, distance, point) + diff
-            heappush(queue, (dist, diff, mesh['adj'][currBox][i]))
+            heappush(queue, (dist, diff, adjBox, point))
             count += 1
     
     
@@ -135,8 +142,8 @@ def find_path (source_point, destination_point, mesh):
         return path, boxes.keys()
     
     while point != source_point:
-        print(point)
         path.append((prev[point],point))
+        #print(point," ",prev[point])
         point = prev[point]
     #print(mesh['adj'][currBox][closeInd])
     #print(boxes)
