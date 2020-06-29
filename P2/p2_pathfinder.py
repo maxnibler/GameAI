@@ -106,7 +106,7 @@ def find_path (source_point, destination_point, mesh):
     B = []
     path = []
     
-    heappush(queue, (0, 0, scBox, point, point, True))
+   # heappush(queue, (0, 0, scBox, point, point, True))
     heappush(queue, (0, 0, dstBox, bpoint, bpoint, False))
     while currBox != bBox and len(queue) != 0:
         dist, diff, box, coord, prePt, flag = heappop(queue)
@@ -116,7 +116,7 @@ def find_path (source_point, destination_point, mesh):
             bBox = box
         
         if flag:
-            #"""    
+                
             if currBox == bBox:
                 path.append((coord, bpoint))
                 point = coord
@@ -143,7 +143,7 @@ def find_path (source_point, destination_point, mesh):
                 #print(diff)
                 dist = segmentLength(coord[0],bpoint[0],coord[1],bpoint[1])
                 heappush(queue, (dist, diff, adjBox, coord, point, flag))
-        #"""
+        
         else:
             if bBox == currBox:
                 path.append((point, coord))
@@ -151,7 +151,7 @@ def find_path (source_point, destination_point, mesh):
             else:
                 bpoint = coord
                 #prev[point] = prePt
-            if bpoint in prev:
+            if bpoint in backPrev:
                 currentPathDist = totalDist(destination_point, backPrev, backDist, bpoint)
                 newPathDist = totalDist(destination_point, backPrev, backDist, prePt) + diff
                 if currentPathDist > newPathDist:
@@ -171,7 +171,7 @@ def find_path (source_point, destination_point, mesh):
                 #print(diff)
                 dist = segmentLength(point[0],c[0],point[1],c[1])
                 heappush(queue, (dist, diff, adjBox, c, bpoint, flag))
-        #"""
+ 
     boxes = {}
     for box in B:
         boxes[box] = mesh['adj'][box]
