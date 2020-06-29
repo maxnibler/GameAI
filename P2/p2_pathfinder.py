@@ -96,9 +96,13 @@ def find_path (source_point, destination_point, mesh):
             
     queue = []
     distance = {}
+    backDist = {}
     prev = {}
-    point = source_point
-    currBox = scBox
+    backPrev = {}
+    apoint = source_point
+    bpoint
+    aBox = scBox
+    bBox
     B = []
     path = []
 
