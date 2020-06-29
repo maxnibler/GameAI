@@ -33,24 +33,49 @@ def boxCenter(box):
     y = (box[2]+box[3])/2
     return x,y
 
-def boxDist(pt, box):
-    #print(pt)
-    #print(box)
+def coordSearch(pt, x1, x2, y1, y2):
     """
-    dist = segmentLength(pt[0],box[0],pt[1],box[2])
-    newDist = segmentLength(pt[0],box[0],pt[1],box[3])
-    if dist > newDist:
-        dist = newDist
-    newDist = segmentLength(pt[0],box[1],pt[1],box[2])
-    if dist > newDist:
-        dist = newDist
-    newDist = segmentLength(pt[0],box[1],pt[1],box[3])
-    if dist > newDist:
-        dist = newDist
+    if x2 - x1 < .1:
+        if y2 - y1 < .1:
+            print(x1, ' ', y1)
+            return x1, y1
+    midx = (x1+x2)/2
+    midy = (y1+y2)/2
+    #midDist = segmentLength(pt[0],midx,pt[1],midy)
+    lowDist = segmentLength(pt[0],x1,pt[1],y1)
+    highDist = segmentLength(pt[0],x2,pt[1],y2)
+    if lowDist < highDist:
+        return coordSearch(pt, x1, midx, y1, midy)
+    else:
+        return coordSearch(pt, midx, x2, midy, y2)
     """
-    x, y = boxCenter(box)
+    if x1 == x2:
+        if pt[1] < y2:
+            if pt[1] > y1:
+                return x1, pt[1]
+            else:
+                return x1, y1
+        else:
+            return x1, y2
+        
+    if y1 == y2:
+        if pt[1] < x2:
+            if pt[1] > x1:
+                return pt[0], y1
+            else:
+                return x1, y1
+        else:
+            return x2, y1
+    
+    
+def boxDist(pt, box1, box2):
+    x1 = min(box1[1], box2[1])
+    x2 = max(box1[0], box2[0])
+    y1 = min(box1[3], box2[3])
+    y2 = max(box1[2], box2[2])
+    x, y = coordSearch(pt, x1, x2, y1, y2)
     dist = segmentLength(pt[0],x,pt[1],y)
-    return dist
+    return dist, (x,y)
 
 def boxInQ(q, box):
     for x in q:
@@ -60,11 +85,7 @@ def boxInQ(q, box):
 
 def totalDist(sc, prev, distance, point):
     tot = 0
-    #print(prev)
-    #print(distance)
     while point != sc:
-        #print(tot," ",point)
-        #print(distance[point])
         tot += distance[point]
         point = prev[point]
     return tot
@@ -79,9 +100,6 @@ def find_path (source_point, destination_point, mesh):
         A path (list of points) from source_point to destination_point if exists
         A list of boxes explored by the algorithm
     """
-    #print (source_point)
-    #print (destination_point)
-    #print (mesh[source_point])
     for i in range(0,len(mesh['boxes'])):
         cat = mesh['boxes'][i]
         if inBox(cat,source_point):
@@ -95,26 +113,25 @@ def find_path (source_point, destination_point, mesh):
     point = source_point
     currBox = scBox
     B = [scBox]
-    #print(B)
     path = []
-    count = 0
     for i in range(0,len(mesh['adj'][currBox])):
         box = mesh['adj'][currBox][i]
-        diff = boxDist(point,box)
-        distance[boxCenter(box)] = diff
-        heappush(queue, (diff, diff, box, point))
-        count += 1
+        diff, coord = boxDist(point,currBox,box)
+        distance[coord] = diff
+        dist = segmentLength(point[0],destination_point[0],point[1],destination_point[1])
+        heappush(queue, (diff, diff, box, coord, point))
     while currBox != dstBox and len(queue) != 0:
-        #print(queue)
-        dist, diff, currBox, prePt = heappop(queue)
-        #print(currBox,": ", dstBox)
+        dist, diff, currBox, coord, prePt = heappop(queue)
         if currBox == dstBox:
-            point = destination_point
+            path.append((coord, destination_point))
+            point = coord
         else:
-            point = boxCenter(currBox)
-        prev[point] = prePt
-        if point in distance:
-            if distance[point] > diff:
+            point = coord
+        #prev[point] = prePt
+        if point in prev:
+            currentPathDist = totalDist(source_point, prev, distance, point)
+            newPathDist = totalDist(source_point, prev, distance, prePt) + diff
+            if currentPathDist > newPathDist:
                 distance[point] = diff
                 prev[point] = prePt
         else:
@@ -127,12 +144,10 @@ def find_path (source_point, destination_point, mesh):
                 continue
             if adjBox in B:
                 continue
-            diff = boxDist(point,adjBox)
-            dist = totalDist(source_point, prev, distance, point) + diff
-            heappush(queue, (dist, diff, adjBox, point))
-            count += 1
-    
-    
+            diff, coord = boxDist(point,currBox,adjBox)
+            #print(diff)
+            dist = segmentLength(point[0],destination_point[0],point[1],destination_point[1])
+            heappush(queue, (dist, diff, adjBox, coord, point))
     boxes = {}
     for box in B:
         boxes[box] = mesh['adj'][box]
