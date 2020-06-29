@@ -101,7 +101,7 @@ def find_path (source_point, destination_point, mesh):
     backPrev = {}
     point = source_point
     bpoint = destination_point
-    Box = scBox
+    currBox = scBox
     bBox = dstBox
     B = []
     path = []
@@ -115,7 +115,7 @@ def find_path (source_point, destination_point, mesh):
         heappush(queue, (diff, diff, box, coord, point))
     """
 
-    heappush(queue, (0, 0, scBox, apoint, apoint, True))
+    heappush(queue, (0, 0, scBox, point, point, True))
     while currBox != dstBox and len(queue) != 0:
         dist, diff, currBox, coord, prePt, flag = heappop(queue)
         if currBox == dstBox:
