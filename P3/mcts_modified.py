@@ -2,6 +2,7 @@
 from mcts_node import MCTSNode
 from random import choice
 from math import sqrt, log
+import random_bot
 
 num_nodes = 1000
 explore_faction = 2.
@@ -18,6 +19,9 @@ def traverse_nodes(node, board, state, identity):
     Returns:        A node from which the next stage of the search can proceed.
 
     """
+    leaf = expand_leaf(node, board, state)
+    return leaf
+    pass
     pass
     # Hint: return leaf_node
 
@@ -33,6 +37,13 @@ def expand_leaf(node, board, state):
     Returns:    The added child node.
 
     """
+    action = node.untried_actions[0]
+    node.untried_actions.remove(action)
+    newState = board.next_state(state, action)
+    #print(action)
+    child = MCTSNode(parent=node, parent_action=action, action_list=board.legal_actions(newState))
+    node.child_nodes[action] = child
+    return child
     pass
     # Hint: return new_node
 
@@ -45,6 +56,20 @@ def rollout(board, state):
         state:  The state of the game.
 
     """
+    wins = [0, 0, 0]
+    while not board.is_ended(state):
+        last_action = random_bot.think(board, state)
+        state = board.next_state(state, last_action)
+    score = board.points_values(state)
+    for i in range(10):
+        while not board.is_ended(state):
+            last_action = random_bot.think(board, state)
+            state = board.next_state(state, last_action)
+        score = board.points_values(state)
+        wins[1] = score[1]
+        
+    print(score[2])
+    return score
     pass
 
 
@@ -56,8 +81,22 @@ def backpropagate(node, won):
         won:    An indicator of whether the bot won or lost the game.
 
     """
+    while True:
+        node.visits += 1
+        if won:
+            node.wins += 1
+        if node.parent == None:
+            break
+        else:
+            node = node.parent
     pass
 
+def nodeState(node, state, board):
+    if node.parent == None:
+        return state
+    state = nodeState(node.parent, state, board)
+    state = board.next_state(state, node.parent_action)
+    return state
 
 def think(board, state):
     """ Performs MCTS by sampling games and calling the appropriate functions to construct the game tree.
@@ -72,15 +111,50 @@ def think(board, state):
     identity_of_bot = board.current_player(state)
     root_node = MCTSNode(parent=None, parent_action=None, action_list=board.legal_actions(state))
 
-    for step in range(num_nodes):
-        # Copy the game for sampling a playthrough
-        sampled_game = state
+    actions = board.legal_actions(state)
+    
+    leaves = []
+    sampled_game = state
+    node = root_node
+    flag = False
 
-        # Start at root
-        node = root_node
-
+    for step in range(num_nodes): 
+        while len(node.untried_actions) == 0:
+            if len(leaves) == 0:
+                flag = True
+                break
+            node = leaves[0]
+            leaves.remove(node)
+            sampled_game = nodeState(node, state, board)
+        if flag:
+            break
         # Do MCTS - This is all you!
+        leaf = traverse_nodes(node, board, sampled_game, identity_of_bot)
+        leaves.append(leaf)
 
+    for leaf in leaves:
+        leafState = nodeState(leaf, state, board)
+        score = rollout(board, leafState)
+        myScore = score[identity_of_bot]
+        if (myScore == 1): won = True
+        else: won = False
+        backpropagate(leaf, won)
+
+    #print(len(root_node.child_nodes))
+    bestRatio = -1
+    bestAction = actions[0]
+    for key in root_node.child_nodes:
+        branch = root_node.child_nodes[key]
+        #print(branch.wins,"/",branch.visits)
+        if bestRatio < 0 or branch.visits > 1:
+            if branch.visits == 0:
+                continue
+            ratio = branch.wins/branch.visits
+            if bestRatio < ratio:
+                bestAction = key
+                bestRatio = ratio
+    #print(bestRatio," ", bestAction)
+    
     # Return an action, typically the most frequently used action (from the root) or the action with the best
     # estimated win rate.
-    return None
+    return bestAction
