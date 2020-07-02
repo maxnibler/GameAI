@@ -109,12 +109,18 @@ def think(board, state):
     leaves = []
     sampled_game = state
     node = root_node
+    flag = False
 
     for step in range(num_nodes): 
-        if len(node.untried_actions) == 0:
+        while len(node.untried_actions) == 0:
+            if len(leaves) == 0:
+                flag = True
+                break
             node = leaves[0]
             leaves.remove(node)
             sampled_game = nodeState(node, state, board)
+        if flag:
+            break
         # Do MCTS - This is all you!
         leaf = traverse_nodes(node, board, sampled_game, identity_of_bot)
         leaves.append(leaf)
@@ -127,11 +133,21 @@ def think(board, state):
         else: won = False
         backpropagate(leaf, won)
 
+    #print(len(root_node.child_nodes))
+    bestRatio = -1
+    bestAction = actions[0]
     for key in root_node.child_nodes:
         branch = root_node.child_nodes[key]
-        print(branch.wins,"/",branch.visits)
-                
+        #print(branch.wins,"/",branch.visits)
+        if bestRatio < 0 or branch.visits > 1:
+            if branch.visits == 0:
+                continue
+            ratio = branch.wins/branch.visits
+            if bestRatio < ratio:
+                bestAction = key
+                bestRatio = ratio
+    #print(bestRatio," ", bestAction)
     
     # Return an action, typically the most frequently used action (from the root) or the action with the best
     # estimated win rate.
-    return actions[0]
+    return bestAction
