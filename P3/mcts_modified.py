@@ -4,7 +4,7 @@ from random import choice
 from math import sqrt, log
 import random_bot
 
-num_nodes = 1000
+num_nodes = 500
 explore_faction = 2.
 
 def traverse_nodes(node, board, state, identity):
@@ -57,18 +57,21 @@ def rollout(board, state):
 
     """
     wins = [0, 0, 0]
-    while not board.is_ended(state):
-        last_action = random_bot.think(board, state)
-        state = board.next_state(state, last_action)
-    score = board.points_values(state)
-    for i in range(10):
+    
+    for i in range(50):
         while not board.is_ended(state):
             last_action = random_bot.think(board, state)
             state = board.next_state(state, last_action)
         score = board.points_values(state)
-        wins[1] = score[1]
-        
-    print(score[2])
+        wins[1] += score[1]
+        wins[2] += score[2]
+
+    if wins[1] > wins[2]:
+        score = {1:1,2:-1}
+    elif wins[2] > wins[1]:
+        score = {1:-1,2:1}
+    else:
+        score = {1:0,2:0}
     return score
     pass
 
@@ -146,7 +149,7 @@ def think(board, state):
     for key in root_node.child_nodes:
         branch = root_node.child_nodes[key]
         #print(branch.wins,"/",branch.visits)
-        if bestRatio < 0 or branch.visits > 1:
+        if bestRatio <= 0 or branch.visits > 1:
             if branch.visits == 0:
                 continue
             ratio = branch.wins/branch.visits

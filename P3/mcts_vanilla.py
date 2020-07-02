@@ -4,7 +4,7 @@ from random import choice
 from math import sqrt, log
 import random_bot
 
-num_nodes = 100
+num_nodes = 500
 explore_faction = 2.
 
 def traverse_nodes(node, board, state, identity):
@@ -139,7 +139,7 @@ def think(board, state):
     for key in root_node.child_nodes:
         branch = root_node.child_nodes[key]
         #print(branch.wins,"/",branch.visits)
-        if bestRatio < 0 or branch.visits > 1:
+        if bestRatio <= 0 or branch.visits > 1:
             if branch.visits == 0:
                 continue
             ratio = branch.wins/branch.visits
