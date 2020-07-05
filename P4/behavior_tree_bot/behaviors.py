@@ -2,6 +2,13 @@ import sys
 sys.path.insert(0, '../')
 from planet_wars import issue_order
 
+def fleetApproaching(state, pid):
+    myFleets = state.my_fleets()
+    for f in myFleets:
+        if f.destination_planet == pid:
+            return True
+    return False
+    pass
 
 def attack_weakest_enemy_planet(state):
     # (1) If we currently have a fleet in flight, abort plan.
@@ -41,11 +48,10 @@ def spread_to_weakest_neutral_planet(state):
         return issue_order(state, strongest_planet.ID, weakest_planet.ID, strongest_planet.num_ships / 2)
 
 #def wouldBeatEnemy(state, myPlanet, enemyPlanet):
-    
-def fleetApproaching(state, pid):
+
+def send_reinforcements(state):
     return False
     pass
-
 
 def spread_to_closest_neutral_planet(state):
     myPlanets = state.my_planets()

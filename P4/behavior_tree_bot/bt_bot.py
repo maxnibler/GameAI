@@ -25,11 +25,21 @@ def setup_behavior_tree():
     # Top-down construction of behavior tree
     root = Selector(name='High Level Ordering of Strategies')
     
-    board_control_plan = Sequence(name='Capture territory')
+    create_zone_plan = Sequence(name='Capture territory')
     closest_planet_check = Check(closest_planet_neutral)
     capture_free_planets = Action(spread_to_closest_neutral_planet)
-    board_control_plan.child_nodes = [closest_planet_check, capture_free_planets]
-    
+    create_zone_plan.child_nodes = [closest_planet_check, capture_free_planets]
+ 
+    defend_border_plan = Sequence(name='Skirmish for Control')
+    border_threat_check = Check(new_enemy_attack)
+    reinforce_borders = Action(send_reinforcements)
+    defend_border_plan.child_nodes = [border_threat_check, reinforce_borders]
+    """
+    secure_territory_plan = Sequence(name='Secure Zone')
+    insecure_territory_check = Check(available_planets)
+    secure_free_planets = Action(secure_available_planets)
+    secure_territory_plan.child_nodes = [in
+    """
     offensive_plan = Sequence(name='Offensive Strategy')
     largest_fleet_check = Check(have_largest_fleet)
     attack = Action(attack_weakest_enemy_planet)
@@ -39,7 +49,8 @@ def setup_behavior_tree():
     neutral_planet_check = Check(if_neutral_planet_available)
     spread_action = Action(spread_to_weakest_neutral_planet)
     spread_sequence.child_nodes = [neutral_planet_check, spread_action]
-    root.child_nodes = [board_control_plan, offensive_plan, spread_sequence, attack.copy()]
+    
+    root.child_nodes = [create_zone_plan, defend_border_plan, offensive_plan, spread_sequence, attack.copy()]
 
     logging.info('\n' + root.tree_to_string())
     return root

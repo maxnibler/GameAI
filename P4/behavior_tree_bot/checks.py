@@ -9,6 +9,7 @@ def have_largest_fleet(state):
              + sum(fleet.num_ships for fleet in state.my_fleets()) \
            > sum(planet.num_ships for planet in state.enemy_planets()) \
              + sum(fleet.num_ships for fleet in state.enemy_fleets())
+    pass
 
 def closest_planet_neutral(state):
     if not any(state.neutral_planets()):
@@ -24,19 +25,19 @@ def closest_planet_neutral(state):
                 return False
     return True
 
-        
-    """
-    dist = float('inf')
-    myPlanets = state.my_planets()
-    neutralPlanets = state.neutral_planets()
-    enemyPlanets = state.enemy_planets()
-    flag = True
-    for mine in myPlanets:
-        for neut in neutralPlanets:
-            if distance(mine, neut) < dist:
-                dist = distance(mine, neut)
-    for mine in myPlanets:
-        for enemy in enemyPlanets:
-            if distance(mine, enemy) < dist:
-                flag = False
-    """
+
+def new_enemy_attack(state):
+    if not any(state.enemy_fleets()):
+        return False
+    enemyFleet = state.enemy_fleets()
+    myFleet = state.my_fleets()
+    for f in enemyFleet:
+        if f.destination_planet in state.my_planets():
+            defended = False
+            for mf in myFleet:
+                if f.destination_planet == mf.destination_planet:
+                    defended = True
+            if not defended:
+                return True
+    return False
+    pass
