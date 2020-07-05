@@ -130,3 +130,29 @@ def spread_to_closest_neutral_planet(state):
     if not startPlanet or not endPlanet:
         return False
     return issue_order(state, startPlanet.ID, endPlanet.ID, endPlanet.num_ships + 1)
+
+def seize_easy_planet(state):
+    return False
+    myPlanets = state.my_planets()
+    neutralPlanets = state.neutral_planets()
+    distance = float('inf')
+    #search all combos of my planets and neutral planets
+    #for the closest capturable planet
+    startPlanet = myPlanets[0]
+    endPlanet = neutralPlanets[0]
+    for m in myPlanets:
+        for n in neutralPlanets:
+            #mine = myPlanets[m]
+            #neut = neutralPlanets[n]
+            if state.distance(m.ID, n.ID) < distance:
+                if m.num_ships > n.num_ships * 2:
+                    if fleetApproaching(state, n.ID):
+                        continue
+                    startPlanet = m
+                    endPlanet = n
+                    distance = state.distance(m.ID,n.ID)
+    if not startPlanet or not endPlanet:
+        return False
+    return issue_order(state, startPlanet.ID, endPlanet.ID, endPlanet.num_ships + 1)
+
+

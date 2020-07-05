@@ -27,27 +27,24 @@ def setup_behavior_tree():
     
     create_zone_plan = Sequence(name='Capture territory')
     closest_planet_check = Check(closest_planet_neutral)
-    capture_free_planets = Action(spread_to_closest_neutral_planet)
-    create_zone_plan.child_nodes = [closest_planet_check, capture_free_planets]
+    capture_close_planets = Action(spread_to_closest_neutral_planet)
+    create_zone_plan.child_nodes = [closest_planet_check, capture_close_planets]
     
     defend_border_plan = Sequence(name='Skirmish for Control')
     border_threat_check = Check(new_enemy_attack)
     reinforce_borders = Action(send_reinforcements)
     defend_border_plan.child_nodes = [border_threat_check, reinforce_borders]
-
-    spread_plan = Sequence(name='Its free real estate')
-    neutral_planet_check = Check(if_neutral_planet_available)
-    spread_plan.child_nodes = [neutral_planet_check, capture_free_planets.copy()]
     
     offensive_plan = Sequence(name='Offensive Strategy')
     largest_fleet_check = Check(have_largest_fleet)
     attack = Action(attack_weakest_enemy_planet)
     offensive_plan.child_nodes = [largest_fleet_check, attack]
 
-    spread_sequence = Sequence(name='Spread Strategy')
+    spread_plan = Sequence(name='Its free real estate')
     neutral_planet_check = Check(if_neutral_planet_available)
-    spread_action = Action(spread_to_weakest_neutral_planet)
-    spread_sequence.child_nodes = [neutral_planet_check, spread_action]
+    capture_free_planets = Action(seize_easy_planet)
+    spread_plan.child_nodes = [neutral_planet_check, capture_free_planets]
+    
     """
     reallocate_plan = Sequence(name='Put units in strategic positions Strategy')
     available_units_check = Check(can_move_units)
