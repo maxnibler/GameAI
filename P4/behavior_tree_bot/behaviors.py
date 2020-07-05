@@ -39,3 +39,33 @@ def spread_to_weakest_neutral_planet(state):
     else:
         # (4) Send half the ships from my strongest planet to the weakest enemy planet.
         return issue_order(state, strongest_planet.ID, weakest_planet.ID, strongest_planet.num_ships / 2)
+
+#def wouldBeatEnemy(state, myPlanet, enemyPlanet):
+    
+def fleetApproaching(state, pid):
+    return False
+    pass
+
+
+def spread_to_closest_neutral_planet(state):
+    myPlanets = state.my_planets()
+    neutralPlanets = state.neutral_planets()
+    distance = float('inf')
+    #search all combos of my planets and neutral planets
+    #for the closest capturable planet
+    startPlanet = myPlanets[0]
+    endPlanet = neutralPlanets[0]
+    for m in myPlanets:
+        for n in neutralPlanets:
+            #mine = myPlanets[m]
+            #neut = neutralPlanets[n]
+            if state.distance(m.ID, n.ID) < distance:
+                if m.num_ships > n.num_ships:
+                    if fleetApproaching(state, n.ID):
+                        continue
+                    startPlanet = m
+                    endPlanet = n
+                    distance = state.distance(m.ID,n.ID)
+    if not startPlanet or not endPlanet:
+        return False
+    return issue_order(state, startPlanet.ID, endPlanet.ID, endPlanet.num_ships + 1)
