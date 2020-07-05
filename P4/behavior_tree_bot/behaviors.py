@@ -47,7 +47,7 @@ def closestSecurePlanet(state, p):
         dist = state.distance(p.ID, planet.ID)
         push(distanceQueue, (dist, planet))
     for pair in distanceQueue:
-        if unitExcess(state, pair[1], True) > 0:
+        if unitExcess(state, pair[1], True) >= -1* unitExcess(state, p, True):
             for f in state.my_fleets():
                 if f.source_planet == pair[1].ID:
                     continue
