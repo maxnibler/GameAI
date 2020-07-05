@@ -1,7 +1,6 @@
 import sys
 sys.path.insert(0, '../')
 from planet_wars import issue_order
-#from heapq import heappush heappop
 
 def fleetApproaching(state, pid):
     myFleets = state.my_fleets()
@@ -10,6 +9,31 @@ def fleetApproaching(state, pid):
             return True
     return False
     pass
+
+def unitExcess(state, p):
+    enemyAttacks = []
+    allyReinforcements = []
+    for f in state.enemy_fleets():
+        if f.destination_planet == p.ID:
+            enemyAttacks.append(f)
+    for f in state.my_fleets():
+        if f.destination_planet == p.ID:
+            allyReinforcements.append(f)
+    units = 0
+    for e in enemyAttacks:
+        units -= e.num_ships
+    for a in allyReinforcements:
+        units += e.num_ships
+    units += p.num_ships
+    return units
+    pass
+
+def closestSecurePlanet(state, p):
+    distanceQueue = []
+    for planet in state.my_planets:
+        dist = distance(p.ID, planet.ID)
+        #heappush(distanceQueue, (dist, planet))
+    return max(state.my_planets(), key=lambda p: p.num_ships, default=None)
 
 def attack_weakest_enemy_planet(state):
     # (1) If we currently have a fleet in flight, abort plan.
@@ -50,6 +74,29 @@ def spread_to_weakest_neutral_planet(state):
 
 def send_reinforcements(state):
     return False
+    enemyFleet = state.enemy_fleets()
+    myFleet = state.my_fleets()
+    for f in enemyFleet:
+        for p in state.my_planets():
+            if f.destination_planet == p.ID:
+                defended = False
+                for mf in myFleet:
+                    if f.destination_planet == mf.destination_planet:
+                        defended = True
+                if not defended:
+                    unitSize = unitExcess(state, p)
+                    unitSize = unitSize * -1
+                    if unitSize < 1:
+                        continue                    
+                    closest = closestSecurePlanet(state, p)
+                    if closest.num_ships < unitSize:
+                        return issue_order(state, closest.ID,\
+                                       f.destination_planet, closest.num_ships + 1)
+                    else:
+                        return issue_order(state, closest.ID, f.destination_planet, unitSize)
+                   
+    return False
+    pass
 
 def spread_to_closest_neutral_planet(state):
     myPlanets = state.my_planets()
