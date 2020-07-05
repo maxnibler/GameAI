@@ -29,12 +29,12 @@ def setup_behavior_tree():
     closest_planet_check = Check(closest_planet_neutral)
     capture_free_planets = Action(spread_to_closest_neutral_planet)
     create_zone_plan.child_nodes = [closest_planet_check, capture_free_planets]
-    """
+    
     defend_border_plan = Sequence(name='Skirmish for Control')
     border_threat_check = Check(new_enemy_attack)
     reinforce_borders = Action(send_reinforcements)
     defend_border_plan.child_nodes = [border_threat_check, reinforce_borders]
-    """
+    
     offensive_plan = Sequence(name='Offensive Strategy')
     largest_fleet_check = Check(have_largest_fleet)
     attack = Action(attack_weakest_enemy_planet)
