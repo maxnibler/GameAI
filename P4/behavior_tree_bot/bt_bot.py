@@ -44,6 +44,11 @@ def setup_behavior_tree():
     neutral_planet_check = Check(if_neutral_planet_available)
     capture_free_planets = Action(seize_easy_planet)
     spread_plan.child_nodes = [neutral_planet_check, capture_free_planets]
+
+    no_options_plan = Sequence(name='We probably Lost')
+    no_planets_check = Check(no_planets_left)
+    do_nothing = Action(wait)
+    no_options_plan.child_nodes = [no_planets_check, do_nothing]
     
     """
     reallocate_plan = Sequence(name='Put units in strategic positions Strategy')
@@ -51,7 +56,8 @@ def setup_behavior_tree():
     shift_units = Action(allocate_forwards)
     reallocate_plan.child_nodes = [available_units_check, shift_units]
     """
-    root.child_nodes = [create_zone_plan, defend_border_plan, offensive_plan, spread_plan, attack.copy()]
+    root.child_nodes = [no_options_plan, create_zone_plan, defend_border_plan,\
+                        offensive_plan, spread_plan, attack.copy()]
 
     logging.info('\n' + root.tree_to_string())
     return root

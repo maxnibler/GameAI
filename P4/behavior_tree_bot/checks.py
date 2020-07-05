@@ -1,4 +1,24 @@
 
+def unitExcess(state, p, mine):
+    enemyAttacks = []
+    allyReinforcements = []
+    for f in state.enemy_fleets():
+        if f.destination_planet == p.ID:
+            enemyAttacks.append(f)
+    for f in state.my_fleets():
+        if f.destination_planet == p.ID:
+            allyReinforcements.append(f)
+    units = 0
+    for e in enemyAttacks:
+        units -= e.num_ships
+    for a in allyReinforcements:
+        units += a.num_ships
+    if mine:
+        units += p.num_ships
+    else:
+        units -= p.num_ships
+    return units
+    pass
 
 def if_neutral_planet_available(state):
     return any(state.neutral_planets())
@@ -26,6 +46,8 @@ def closest_planet_neutral(state):
     return True
     pass
 
+def no_planets_left(state):
+    return not any(state.my_planets())
 
 def new_enemy_attack(state):
     if not any(state.enemy_fleets()):
