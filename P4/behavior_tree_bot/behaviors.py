@@ -1,6 +1,7 @@
 import sys
 sys.path.insert(0, '../')
 from planet_wars import issue_order
+#from heapq import heappush heappop
 
 def fleetApproaching(state, pid):
     myFleets = state.my_fleets()
@@ -47,11 +48,8 @@ def spread_to_weakest_neutral_planet(state):
         # (4) Send half the ships from my strongest planet to the weakest enemy planet.
         return issue_order(state, strongest_planet.ID, weakest_planet.ID, strongest_planet.num_ships / 2)
 
-#def wouldBeatEnemy(state, myPlanet, enemyPlanet):
-
-def send_reinforcements(state):
-    return False
-    pass
+#def send_reinforcements(state):
+    #return False
 
 def spread_to_closest_neutral_planet(state):
     myPlanets = state.my_planets()

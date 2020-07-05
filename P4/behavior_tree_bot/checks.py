@@ -24,6 +24,7 @@ def closest_planet_neutral(state):
             if dist > state.distance(m.ID, e.ID):
                 return False
     return True
+    pass
 
 
 def new_enemy_attack(state):
@@ -32,12 +33,13 @@ def new_enemy_attack(state):
     enemyFleet = state.enemy_fleets()
     myFleet = state.my_fleets()
     for f in enemyFleet:
-        if f.destination_planet in state.my_planets():
-            defended = False
-            for mf in myFleet:
-                if f.destination_planet == mf.destination_planet:
-                    defended = True
-            if not defended:
-                return True
+        for p in state.my_planets():
+            if f.destination_planet == p.ID:
+                defended = False
+                for mf in myFleet:
+                    if f.destination_planet == mf.destination_planet:
+                        defended = True
+                    if not defended:
+                        return True
     return False
     pass
