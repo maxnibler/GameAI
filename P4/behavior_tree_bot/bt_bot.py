@@ -34,6 +34,10 @@ def setup_behavior_tree():
     border_threat_check = Check(new_enemy_attack)
     reinforce_borders = Action(send_reinforcements)
     defend_border_plan.child_nodes = [border_threat_check, reinforce_borders]
+
+    spread_plan = Sequence(name='Its free real estate')
+    neutral_planet_check = Check(if_neutral_planet_available)
+    spread_plan.child_nodes = [neutral_planet_check, capture_free_planets.copy()]
     
     offensive_plan = Sequence(name='Offensive Strategy')
     largest_fleet_check = Check(have_largest_fleet)
@@ -44,8 +48,13 @@ def setup_behavior_tree():
     neutral_planet_check = Check(if_neutral_planet_available)
     spread_action = Action(spread_to_weakest_neutral_planet)
     spread_sequence.child_nodes = [neutral_planet_check, spread_action]
-    
-    root.child_nodes = [create_zone_plan, offensive_plan, spread_sequence, attack.copy()]
+    """
+    reallocate_plan = Sequence(name='Put units in strategic positions Strategy')
+    available_units_check = Check(can_move_units)
+    shift_units = Action(allocate_forwards)
+    reallocate_plan.child_nodes = [available_units_check, shift_units]
+    """
+    root.child_nodes = [create_zone_plan, defend_border_plan, offensive_plan, spread_plan, attack.copy()]
 
     logging.info('\n' + root.tree_to_string())
     return root

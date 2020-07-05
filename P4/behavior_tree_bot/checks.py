@@ -35,11 +35,14 @@ def new_enemy_attack(state):
     for f in enemyFleet:
         for p in state.my_planets():
             if f.destination_planet == p.ID:
+                return True
+                """
                 defended = False
                 for mf in myFleet:
                     if f.destination_planet == mf.destination_planet:
                         defended = True
                     if not defended:
                         return True
+                """
     return False
     pass
