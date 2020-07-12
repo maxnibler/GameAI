@@ -49,7 +49,7 @@ class Individual_Grid(object):
             jumps=0.5,
             negativeSpace=0.6,
             pathPercentage=0.5,
-            emptyPercentage=0.6,
+            emptyPercentage=0.3,
             linearity=-0.5,
             solvability=1.0
         )
@@ -62,17 +62,37 @@ class Individual_Grid(object):
         if self._fitness is None:
             self.calculate_fitness()
         return self._fitness
-
+        
     # Mutate a genome into a new genome.  Note that this is a _genome_, not an individual!
     def mutate(self, genome):
         # STUDENT implement a mutation operator, also consider not mutating this individual
         # STUDENT also consider weighting the different tile types so it's not uniformly random
         # STUDENT consider putting more constraints on this to prevent pipes in the air, etc
-
+        if random.randrange(100) > 80 :
+            return genome
+        groundSet = ['|', 'X']
+        blockSet = ['?', 'B', 'M']
         left = 1
         right = width - 1
         for y in range(height):
             for x in range(left, right):
+                currSym = genome[y][x]
+                sym = currSym
+                randNum = random.randrange(10)
+                if currSym == '|' and (genome[y-1][x] != '|' and genome[y-1][x] != 'T'):
+                    sym = '-'
+                if y < 15:
+                    if genome[y+1][x] == 'X':
+                        if randNum == 1:
+                            sym = groundSet[0]
+                        elif randNum == 2:
+                            sym = groundSet[1]
+                    elif genome[y+1][x] == '|':
+                        if randNum < 7:
+                            sym = 'T'
+                        else:
+                            sym = '|'
+                genome[y][x] = sym
                 pass
         return genome
 

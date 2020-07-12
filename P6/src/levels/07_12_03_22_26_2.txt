@@ -1,0 +1,16 @@
+--X---TXXT|---T-XXTX|-||--TTX-X|-?T|XX|XTTTTT|T-X-TXX|X|---X|-XT-TXTTXXT--|--|T|TX|X|-|TT|-|-XXTX-|-TTXX-T||-X----|TTXX-||XT-TX|X|TXT|TT|---T|-T||T|X|-|XXX|X--E----TTXX-XTT-|X|XTTT-X--|XX|||-||TT|T---
+-|-X|X-XTToXX-||X||-|--X----XXTTT-|-|-TT|BTT|X-TX---TX||XT-T-X|-X|T-TTEMXTT-X-|TX--X-TT-T|X-T-XX-X|T?|-T--X|X|M-TX-|XT-T|--X|X-TT-|X-|XXTTXX-|-X-T---T-|-X----XXX||XX-XX-T--T|TXT|-|-T---X||X---X||---|-
+-XX|X-|--|X-|---T--X|XX-||-T|XTXXXTXMXX-|T|-T-|-TTTXXX-|XT|-X-T||-|--XT-T-TX--T|TT|X-E--|-XTT|-XXX-TTX-|||-|-TT|TT-T|X|T--XX--TXX|XT----XT-TX-X--|T|X-XTX-XTX-|X-TTX-X---T-T-TXT||--T-X|--X|T|XT---T-|--
+---||TXBX-|---T--XX||TXT||-X-TTX-TT---T||T|--X|-T-TXXX-X||---X-X---X--T|XXT|-XT|-|TT--|T---X-TT|TX|T-|TX--||-X|X--T-|T|--TT|XX-XTT|X|-X--TT---|-T|X|XX-T|X|X-|E|-|-TX|T||--TTX----|-TXB|XT|TT---X-|-|TT-
+-?T-||oXX-TXX|----|X-T-T--X|-T-X-T-X-|-|-|-XTT-T-T-X||--XXX--|T|TXXXTX-TX|-X|TX-XXX|X-X-||T--|TX-|T-TX-||XXT|XX---TTX|--XX||X-||TXX-T-|-X-TXTX|---------TXX|X--|XTXX-|TMT|-||-XXT|X--TX-T|T-T-T-||X-XT--
+-T|-T---T|TTXXT-|--|-------X|X|T-X-XX||T--X|X|-X|T--X-X|T-|TX--TXXo--||-|-X|-T|XT|-|T-T||X|T-TXXM-|-||-|-T--X|-X-X----X-||T--X--T|X---|-XT-||---TT||||T|--|T|XX---X|-X-|-|T-T---X|X|X---X|-T--T---||-T--
+--XX|X--X--XTX|T--|--XT|-||T|X-T-|T|XX--oTXX|---|--|XT-|-TX-T-TXE||TTX||XT|--||X-|--XX-|--XX-|-TT-||TTT-------||T|T--X-T|---|TT-|-|-|--XX-XTX||-|XXXX--T-||E|XXT-|||T||X|X--T-XT-|T-|XX|-X|-|--|XX-ET|X-
+-|-XX|-TTT----||T--|-X|-TTTX?-EX|T----|---|XXX-X-|||X-T-X-|T-XXX-|X-T|T---X|T|-XX|-T|-TX-X---|---T-|TXX|---TTXTTX|-|-|XXXT|T|T|XX|TTTTXXXTBTT-T-TT|T-TT--XXTX-XX|X||XT--|X--|||-T-||--|--TT|XX-X-TTXX-Tv
+---X-|T-XTT--X-XX|X||-T-|TTX-TXT|T-TT||-X-XXT|--|X--TTX|||||-TT|TX|T--TXXX|TXMX--X|X-TTT--XT-X||T-X-oXTTT-TXT|X---E|-TXT-XT|-|---XTTTX-?--|--|-|XX-XX--|TT-|-T|-X|-XXE|X-X||X--X|-T-X-|XX-||TXXX|--|-X-f
+----|-X-XX|-T--|-T|TT-|XTTT--XT-||TXTX---|X||-||--T|TTXX-TXX--TX-TTXTT-TX---T--X-X-TTBX|TXET--T|XT--TXT--TX--|--|T?T|-XTTX-|T-|-||T|T|--XT||X|XX-TTTT-X|----XT|--X--|-|X-T|X--X-XT|---|T--|T|T-|T||X-TXf
+-TX--XXXTXX-|XTX-T|XXTTT|X||XX|X-T|XX|------T-TT|-TT|-T-X-T-XTXXTXX|XT-T|--T---XT-T-||T-EX|TX-TXT||X-|--XX-T|X|XX--|---TTTXTTTXXX--TTTX--|-|TX----|T|Xo-XX|TT-XT-B-X-TT|----T-BT|X||XX-|XXT|--XT-T-T-T|f
+-TX|--|--|---X|XTT|-X|-|-|||XT-XT--TX-XTTT|XX|-X-TTXXTXTT-XX-|-TT|TT|TT-|TT-TBT---|-|---T-||--XT-XXX|||--|||X|-XT|TX|X--T||X|TT--T-X-|T---X||-||-T-|T|-||X-XXXTT--|X-T|-T||X-X|X|T||X-XT?--XXX||XXE||-Tf
+-X---XXXX-X-||XXT|-|-X||X|TXT|-||-XX--|T--|-T|-TX-|-||X-XX|-XTXT|XTTXTT|--T--|--TB|XX-XX-|T||T|T|--T--X--o|T-T||XX|XTXX-|T----|X-T-X|X-TXTX-T----X|-|-X-T-X---T||T-|-X-XT-T--X--XXT-T--T|-X|-X|XXTTT|X-f
+--||T--X||TX|X|---X-|TT|X|T|---X|T-E|XT-|---X----|T-T-T|T-X|T--T----||-|XX|TTXTXXTXT-TT-XXT-||T-XTX||XX--TT|-T|XX-X||X-|-|---X|||XXX-TX-||X|--TT|-|-T|T-T|-||---XX-T-XX|-|T|TTX-T-XTTX--TTT--X|T-TXT---f
+m|--TXXX--|T----T||-|X|-||T|XXX-|-XXXXX|-|TXT---XX-T||--|X|T--XX-T|TT-|TXTT-XXXX-X-TT-|--X-T|X|T-TX|X||-T|TXX--T-XX--X-|--|T||X|T-|TX-TXT|-|TT|T|XXT|TTXTTXT--|-|XX|--||T-XX--X||TXX||||-XX--X-T||TXXTTX
+XXXXXXXX|XXXXXXXX|XXX|XXXXXXTX|TXXX|XX|XT||TXXX|X|X|XX|XX|XX|XTXXTTX|TXXXT|XXX|T|XXXXXXXXXX||XXT|TXX|TXX|||TX|XXX|XTXX||TXXXTXXT|XTX||TXXX|||XTTXXX|T|XTXXXTXTXXTT|XT|||TTXTXXX|T||TTXXT|X|XTXXXTX|X|X|X
