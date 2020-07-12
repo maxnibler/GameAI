@@ -45,12 +45,12 @@ class Individual_Grid(object):
         # Default fitness function: Just some arbitrary combination of a few criteria.  Is it good?  Who knows?
         # STUDENT Modify this, and possibly add more metrics.  You can replace this with whatever code you like.
         coefficients = dict(
-            meaningfulJumpVariance=0.5,
-            jumps=0.5,
-            negativeSpace=0.6,
-            pathPercentage=0.5,
+            meaningfulJumpVariance=0.1,
+            jumps=-0.6,
+            negativeSpace=0.1,
+            pathPercentage=0.9,
             emptyPercentage=0.9,
-            linearity=-0.5,
+            linearity=0.5,
             solvability=1.0
         )
         self._fitness = sum(map(lambda m: coefficients[m] * measurements[m],
@@ -68,7 +68,7 @@ class Individual_Grid(object):
         # STUDENT implement a mutation operator, also consider not mutating this individual
         # STUDENT also consider weighting the different tile types so it's not uniformly random
         # STUDENT consider putting more constraints on this to prevent pipes in the air, etc
-        if random.randrange(100) > 80 :
+        if random.randrange(100) > 20 :
             return genome
         groundSet = ['|', 'X']
         blockSet = ['?', 'B', 'M']
@@ -80,28 +80,39 @@ class Individual_Grid(object):
                 sym = currSym
                 randNum = random.randrange(10)
                 #clean erratic blocks
+                if y < 3:
+                    genome[y][x] = '-'
+                    continue                        
                 if currSym == '|':
                     if (genome[y-1][x] != '|' and genome[y-1][x] != 'T'):
                         sym = '-'
                     if y < 15:
-                        if genome[y+1][x] == '-':
+                        if genome[y+1][x] != '|' and genome[y+1][x] != 'X':
                             sym = '-'
                 if currSym == 'T':
-                    if genome[y+1][x] != '|':
+                    if genome[y+1][x] != '|' and genome[y+1][x] != 'X':
                         sym = '-'
-                
+                if y == 15 and currSym == 'X':
+                    if randNum == 3:
+                        #Make hole
+                        sym = '-'
+                if y == 14:
+                    if currSym == '-':
+                        #Add pipe
+                        if randNum < 5:
+                            if genome[y+1][x] == 'X':
+                                sym == 'T'
                 if y < 15:
-                    #add pipes
-                    if genome[y+1][x] == 'X':
-                        if randNum == 1:
-                            sym = groundSet[0]
-                        elif randNum == 2:
-                            sym = groundSet[1]
-                    elif genome[y+1][x] == '|':
-                        if randNum < 7:
-                            sym = 'T'
-                        else:
-                            sym = '|'
+                        #Add Stair/wall
+                        if randNum == 9:
+                            if genome[y+1][x] != '-':
+                                sym = 'X'
+                        elif randNum == 5:
+                            sym = blockSet[random.randrange(3)]
+                        elif currSym == '-':
+                            if randNum == 7:
+                                if random.randrange(7) < 2:
+                                    sym = 'E'
                 genome[y][x] = sym
                 pass
         return genome
@@ -201,9 +212,9 @@ class Individual_DE(object):
         coefficients = dict(
             meaningfulJumpVariance=0.5,
             negativeSpace=0.6,
-            pathPercentage=0.5,
-            emptyPercentage=0.6,
-            linearity=-0.5,
+            pathPercentage=0.6,
+            emptyPercentage=0.9,
+            linearity=0.1,
             solvability=2.0
         )
         penalties = 0
