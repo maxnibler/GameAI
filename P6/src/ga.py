@@ -85,7 +85,10 @@ class Individual_Grid(object):
                         sym = '-'
                     if y < 15:
                         if genome[y+1][x] == '-':
-                            sym = '-'                
+                            sym = '-'
+                if currSym == 'T':
+                    if genome[y+1][x] != '|':
+                        sym = '-'
                 
                 if y < 15:
                     #add pipes
