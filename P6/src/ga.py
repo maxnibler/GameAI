@@ -92,6 +92,11 @@ class Individual_Grid(object):
                 if currSym == 'T':
                     if genome[y+1][x] != '|' and genome[y+1][x] != 'X':
                         sym = '-'
+                    #Grow Pipe
+                    if genome[y-1][x] == '-' and randNum > 4:
+                        genome[y-1][x] = 'T'
+                        genome[y][x] = '|'
+                        continue
                 if y == 15 and currSym == 'X':
                     if randNum == 3:
                         #Make hole
@@ -99,9 +104,9 @@ class Individual_Grid(object):
                 if y == 14:
                     if currSym == '-':
                         #Add pipe
-                        if randNum < 5:
+                        if randNum < 2:
                             if genome[y+1][x] == 'X':
-                                sym == 'T'
+                                sym = 'T'
                 if y < 15:
                         #Add Stair/wall
                         if randNum == 9:
