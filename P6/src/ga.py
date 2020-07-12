@@ -49,7 +49,7 @@ class Individual_Grid(object):
             jumps=0.5,
             negativeSpace=0.6,
             pathPercentage=0.5,
-            emptyPercentage=0.3,
+            emptyPercentage=0.9,
             linearity=-0.5,
             solvability=1.0
         )
@@ -79,9 +79,16 @@ class Individual_Grid(object):
                 currSym = genome[y][x]
                 sym = currSym
                 randNum = random.randrange(10)
-                if currSym == '|' and (genome[y-1][x] != '|' and genome[y-1][x] != 'T'):
-                    sym = '-'
+                #clean erratic blocks
+                if currSym == '|':
+                    if (genome[y-1][x] != '|' and genome[y-1][x] != 'T'):
+                        sym = '-'
+                    if y < 15:
+                        if genome[y+1][x] == '-':
+                            sym = '-'                
+                
                 if y < 15:
+                    #add pipes
                     if genome[y+1][x] == 'X':
                         if randNum == 1:
                             sym = groundSet[0]
